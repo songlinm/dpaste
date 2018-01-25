@@ -1,7 +1,7 @@
 from random import SystemRandom
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -45,7 +45,7 @@ class Snippet(models.Model):
         choices=EXPIRE_CHOICES, default=EXPIRE_CHOICES[0][0])
     expires = models.DateTimeField(_(u'Expires'), blank=True, null=True)
     view_count = models.PositiveIntegerField(_('View count'), default=0)
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='children')
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('-published',)
