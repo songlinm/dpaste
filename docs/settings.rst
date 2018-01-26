@@ -34,10 +34,6 @@ behavior without touching the code:
         String. The full qualified hostname and path to the dpaste instance.
         This is used to generate a link in the API response. Default: ``https://dpaste.de``
 
-    ``DPASTE_SITE_NAME``
-        String. Site name to display in page titles. Default:
-        ``dpaste.de``
-
     ``DPASTE_LEXER_LIST``
         Choices. A tuple of choices of Pygments lexers used in the lexer
         dropdown. Here is the full `lexer list`_ which is currently used.
@@ -98,6 +94,8 @@ behavior without touching the code:
         **Removed in Version 2.13!**
         Boolean. Whether to display the Gist button for re-pasting to GitHub.
         Default: ``True``
+
+        ..warning: This feature was removed in v2.11.
 
     ``DPASTE_DEFAULT_GIST_NAME``
         **Removed in Version 2.13!**

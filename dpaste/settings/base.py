@@ -13,12 +13,18 @@ PROJECT_DIR, PROJECT_MODULE_NAME = os.path.split(
     os.path.dirname(os.path.realpath(dpaste.__file__))
 )
 
-# Set the variable root to $VIRTUALENV/var.
 PYTHON_BIN = os.path.dirname(sys.executable)
-
-VAR_ROOT = os.path.join(os.path.dirname(PYTHON_BIN), 'var')
-if not os.path.exists(VAR_ROOT):
-    os.mkdir(VAR_ROOT)
+if os.path.exists(os.path.join(PYTHON_BIN, 'activate_this.py')):
+    # Assume that the presence of 'activate_this.py' in the python bin/
+    # directory means that we're running in a virtual environment. Set the
+    # variable root to $VIRTUALENV/var.
+    VAR_ROOT = os.path.join(os.path.dirname(PYTHON_BIN), 'var')
+    if not os.path.exists(VAR_ROOT):
+        os.mkdir(VAR_ROOT)
+else:
+    # Set the variable root to the local configuration location (which is
+    # ignored by the repository).
+    VAR_ROOT = os.path.join(PROJECT_DIR, PROJECT_MODULE_NAME, 'conf', 'local')
 
 #==============================================================================
 # Generic Django project settings
@@ -65,14 +71,10 @@ LOCALE_PATHS = (
 )
 
 #==============================================================================
-# Static files
+# Project URLS and media settings
 #==============================================================================
 
 STATIC_ROOT = os.path.join(VAR_ROOT, 'static')
-
-#==============================================================================
-# Project URLS and media settings
-#==============================================================================
 
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
@@ -87,14 +89,15 @@ LOGIN_REDIRECT_URL = '/'
 # Templates
 #==============================================================================
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
-
+    'django.middleware.security.SecurityMiddleware',
+    'csp.middleware.CSPMiddleware',
+]
 
 TEMPLATES = [
     {
@@ -106,7 +109,6 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.template.context_processors.i18n',
-                'dpaste.context_processors.dpaste_globals',
             ],
         },
     },
@@ -115,7 +117,6 @@ TEMPLATES = [
 INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sessions',
-    'gunicorn',
     'dpaste',
 )
 
@@ -135,6 +136,17 @@ DATABASES = {
 # How many recent snippets to save for every user? IDs of this snippets are
 # stored in the user session.
 MAX_SNIPPETS_PER_USER = 25
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_BROWSER_XSS_FILTER =True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+CSP_DEFAULT_SRC = ("'none'",)
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 
 LOGGING = {
     'version': 1,

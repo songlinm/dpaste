@@ -1,12 +1,17 @@
 Changelog
 =========
 
-2.14 (master)
+3.0 (master)
 -------------
 
-* Django 1.11 compatibility. But not Django 2.0 yet. 
+* General code cleanup
+* Removed jQuery, all Javascript is native.
+* Removed Bootstrap for theming.
+* Django 1.11 based templates, forms, views, models, etc.
+* All views are now class based and use the latest generic based views sugar.
 * Removed "Suspicious" middleware which was never been used, documented, 
-  and also not functional for a while. 
+  and also not functional for a while.
+* Fixed CMD+Enter form submission shortcut in Firefox. 
 
 2.13 (2017-01-20)
 -----------------

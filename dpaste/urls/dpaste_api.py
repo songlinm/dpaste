@@ -1,7 +1,10 @@
-from django.conf.urls import url
+from __future__ import unicode_literals
 
-from ..views import snippet_api
+from django.conf.urls import url
+from django.views.decorators.csrf import csrf_exempt
+
+from ..views import APIView
 
 urlpatterns = [
-    url(r'^api/$', snippet_api, name='dpaste_api_create_snippet'),
+    url(r'^api/$', csrf_exempt(APIView.as_view()), name='dpaste_api_create_snippet'),
 ]

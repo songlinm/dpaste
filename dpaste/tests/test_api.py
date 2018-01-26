@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -12,8 +13,7 @@ class SnippetAPITestCase(TestCase):
 
     def setUp(self):
         self.api_url = reverse('dpaste_api_create_snippet')
-        self.client = Client()
-
+        self.client = Client(enforce_csrf_checks=True)
 
     def test_empty(self):
         """
